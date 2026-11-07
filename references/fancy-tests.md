@@ -1,48 +1,48 @@
-# Глава 6. Fancy Tests — «модные» виды тестов
+# Chapter 6. Fancy Tests
 
-Идея главы: юнит- и интеграционные тесты — только часть автоматической проверки.
-Сборка (CI) должна падать и от других видов проверок. Ниже — каждое правило из выдержек
-([yegor256/at](https://github.com/yegor256/at)): инструменты, названные автором, и наши
-дополнения для других экосистем (помечены «также»).
+Unit and integration tests cover only part of automated verification. Other kinds of checks
+should fail the build too. The table lists every rule from the excerpts
+([yegor256/at](https://github.com/yegor256/at)), the tools the author names, and our additions
+for other ecosystems in the "Also" column.
 
-| № | Правило | Инструменты автора | Также |
-|---|---------|--------------------|-------|
-| 6.1 | Проверяй грамматику и опечатки (в коде, документации, сообщениях) | languagetool, typos-action | codespell, cspell, Vale |
-| 6.2 | Применяй Property-Based Testing | jqwik, quickcheck | Hypothesis (Python), fast-check (JS), proptest (Rust), gopter / `testing/quick` (Go), SwiftCheck |
-| 6.3 | Используй фаззинг | jqf, oss-fuzz, syzkaller | libFuzzer, AFL++, cargo-fuzz, `go test -fuzz`, Atheris (Python), Jazzer (JVM) |
-| 6.4 | Используй мутационное тестирование | pitest | mutmut / cosmic-ray (Python), Stryker (JS/C#), cargo-mutants, go-mutesting, Mull (C++) |
-| 6.5 | Проверяй раскладку файлов во время сборки | (jtcop для тестов) | свои скрипты/правила: все файлы на своих местах, нет лишнего |
-| 6.6 | Нагрузочные тесты | jmeter, locust | k6, Gatling, wrk |
-| 6.7 | Тесты производительности (микробенчмарки) | jmh | pytest-benchmark, criterion (Rust), `testing.B` (Go), Google Benchmark (C++), XCTest `measure` |
-| 6.8 | Сравнивай производительность новой и предыдущей сборки | jmh-benchmark-action | github-action-benchmark, Bencher |
-| 6.9 | Линтеры | eslint, rust-clippy, checkstyle, pylint, ruff | golangci-lint, rubocop, SwiftLint, qulice (Java, проект Бугаенко) |
-| 6.10 | Статический анализ при сборке | clang-tidy, spotbugs, infer | PMD, Error Prone, mypy/pyright, CodeQL, Semgrep |
-| 6.11 | Собирай метрики кода и роняй сборку при превышении порогов | — | цикломатическая сложность, размер классов, покрытие (JaCoCo с минимальным порогом), cohesion |
-| 6.12 | Тестируй SQL-запросы | pgtap | tSQLt (MSSQL), utPLSQL (Oracle) |
-| 6.13 | Находи самые медленные SQL-запросы | dexter | pg_stat_statements, `EXPLAIN ANALYZE` в тестах |
-| 6.14 | Используй санитайзеры | — | ASan, UBSan, TSan, MSan (`-fsanitize=`), Rust `-Zsanitizer`, Go `-race` |
-| 6.15 | Используй динамический анализ | — | Valgrind, Helgrind, DTrace, Go race detector |
-| 6.16 | Ищи клоны кода | simian | PMD CPD, jscpd |
-| 6.17 | Тестирование в браузере | selenium, playwright | Cypress, WebdriverIO |
-| 6.18 | Тестирование в нескольких браузерах | saucelabs | BrowserStack, playwright с chromium/firefox/webkit |
-| 6.19 | Кросс-браузерное тестирование | — | то же |
-| 6.20 | GUI-тестирование | — | XCUITest, Espresso, Appium |
-| 6.21 | Облачные анализаторы кода | SonarQube, Snyk, Codacy | CodeClimate, DeepSource |
-| 6.22 | Live-тесты, проверяющие продакшен-конфигурации | — | тест, запускающий приложение с настоящей конфигурацией (по тегу/вручную) |
-| 6.23 | Health checks после деплоя | — | `/health`-эндпоинт + проверка в пайплайне деплоя, smoke-тесты |
-| 6.24 | Генерируй тесты при сборке | randoop | EvoSuite, Pynguin |
-| 6.25 | Тесты безопасности | zaproxy (OWASP ZAP) | Burp, Trivy, OWASP Dependency-Check, bandit, gosec |
-| 6.26 | Проверка лицензионной чистоты | ort, reuse-action | licensee, cargo-deny, license-checker |
-| 6.27 | Находи избыточные тесты | — | анализ покрытия по тестам + мутационное тестирование: тесты, которые не убивают ни одного уникального мутанта |
-| 6.28 | Проверяй архитектуру при сборке | archunit | import-linter (Python), dependency-cruiser (JS), cargo-deny/модульные правила |
+| # | Rule | Author's tools | Also |
+|---|------|----------------|------|
+| 6.1 | Test for grammar mistakes and typos (in code, docs, messages) | languagetool, typos-action | codespell, cspell, Vale |
+| 6.2 | Employ Property Based Testing tools | jqwik, quickcheck | Hypothesis (Python), fast-check (JS), proptest (Rust), gopter or `testing/quick` (Go), SwiftCheck |
+| 6.3 | Use Fuzzing tools | jqf, oss-fuzz, syzkaller | libFuzzer, AFL++, cargo-fuzz, `go test -fuzz`, Atheris (Python), Jazzer (JVM) |
+| 6.4 | Use Mutation Testing | pitest | mutmut or cosmic-ray (Python), Stryker (JS/C#), cargo-mutants, go-mutesting, Mull (C++) |
+| 6.5 | Check files layout during the build | (jtcop for tests) | custom scripts or rules: every file in its place, nothing extra |
+| 6.6 | Use Load Tests | jmeter, locust | k6, Gatling, wrk |
+| 6.7 | Use Performance Tests (microbenchmarks) | jmh | pytest-benchmark, criterion (Rust), `testing.B` (Go), Google Benchmark (C++), XCTest `measure` |
+| 6.8 | Benchmark new vs. previous builds | jmh-benchmark-action | github-action-benchmark, Bencher |
+| 6.9 | Use Linters | eslint, rust-clippy, checkstyle, pylint, ruff | golangci-lint, rubocop, SwiftLint, qulice (Java, a Bugayenko project) |
+| 6.10 | Use Static Analysis at build time | clang-tidy, spotbugs, infer | PMD, Error Prone, mypy or pyright, CodeQL, Semgrep |
+| 6.11 | Collect source code metrics and fail when thresholds are exceeded | none named | cyclomatic complexity, class size, coverage (JaCoCo with a minimum), cohesion |
+| 6.12 | Test SQL queries | pgtap | tSQLt (MSSQL), utPLSQL (Oracle) |
+| 6.13 | Detect slowest SQL queries | dexter | pg_stat_statements, `EXPLAIN ANALYZE` in tests |
+| 6.14 | Use Sanitizers | none named | ASan, UBSan, TSan, MSan (`-fsanitize=`), Rust `-Zsanitizer`, Go `-race` |
+| 6.15 | Use Dynamic Analysis tools | none named | Valgrind, Helgrind, DTrace, Go race detector |
+| 6.16 | Employ Clone Detection tools | simian | PMD CPD, jscpd |
+| 6.17 | Use In-Browser Testing | selenium, playwright | Cypress, WebdriverIO |
+| 6.18 | Use Multi-Browser Testing | saucelabs | BrowserStack, playwright with chromium/firefox/webkit |
+| 6.19 | Use Cross-Browser Testing | none named | same as 6.18 |
+| 6.20 | Use GUI Testing | none named | XCUITest, Espresso, Appium |
+| 6.21 | Use Cloud Code Analyzers | SonarQube, Snyk, Codacy | CodeClimate, DeepSource |
+| 6.22 | Create Live Tests that verify production-ready configurations | none named | a test that boots the app with the real configuration (behind a tag or run by hand) |
+| 6.23 | Use Health Checks after deployment | none named | a `/health` endpoint checked by the deploy pipeline, smoke tests |
+| 6.24 | Generate tests at build time | randoop | EvoSuite, Pynguin |
+| 6.25 | Employ Security Tests | zaproxy (OWASP ZAP) | Burp, Trivy, OWASP Dependency-Check, bandit, gosec |
+| 6.26 | Do License Compliance Testing | ort, reuse-action | licensee, cargo-deny, license-checker |
+| 6.27 | Detect redundant tests | none named | per-test coverage plus mutation testing: tests that kill no unique mutant |
+| 6.28 | Validate architecture at build time | archunit | import-linter (Python), dependency-cruiser (JS), module rules in cargo-deny |
 
-## Как применять
-- При настройке проекта предлагай минимальный набор: линтер (6.9), статический анализ (6.10),
-  метрики с порогами (6.11), мутационное тестирование (6.4), проверку опечаток (6.1).
-  Остальное — по природе проекта (веб → 6.17–6.19, БД → 6.12–6.13, C/C++ → 6.14–6.15,
-  сервис → 6.6, 6.22, 6.23).
-- Каждая проверка должна **ронять сборку**, а не просто печатать отчёт.
-- Property-based (6.2) и фаззинг (6.3) — естественное продолжение принципов 2.7, 3.8, 3.9:
-  они систематически ищут «неудобные» входы, которые человек не придумает.
-- Мутационное тестирование (6.4) — главный ответ на *The Liar* и *Line Hitter*:
-  покрытие показывает, что код выполнялся, а мутанты — что тесты действительно что-то проверяют.
+## How to apply
+- When setting up a project, propose a minimal set first: a linter (6.9), static analysis (6.10),
+  metrics with thresholds (6.11), mutation testing (6.4) and a typo check (6.1).
+  Add the rest to fit the project: web apps get 6.17–6.19, databases 6.12–6.13,
+  C and C++ 6.14–6.15, services 6.6, 6.22 and 6.23.
+- Each check must **fail the build**. A report that nobody reads does not count.
+- Property-based testing (6.2) and fuzzing (6.3) extend rules 2.7, 3.8 and 3.9:
+  they search for the hostile inputs a person would not think of.
+- Mutation testing (6.4) answers *The Liar* and *Line Hitter*. Coverage shows that code ran;
+  killed mutants show that the tests check something.

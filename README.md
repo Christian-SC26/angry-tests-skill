@@ -1,41 +1,43 @@
-# angry-tests — скилл для Claude Code
+# angry-tests
 
-Скилл для [Claude Code](https://claude.com/claude-code). Учит Claude писать и ревьюить автоматические
-тесты по принципам книги Егора Бугаенко [«Angry Tests»](https://www.yegor256.com/angry-tests.html).
+A [Claude Code](https://claude.com/claude-code) skill that writes and reviews automated tests by the rules of Yegor Bugayenko's book [*Angry Tests*](https://www.yegor256.com/angry-tests.html).
 
-Внутри — разбор каждого опубликованного правила (главы 2, 3 и 6, номера сохранены), примеры
-«плохо/хорошо», адаптация под Java, Python, JS/TS, Go, Ruby, Rust и Swift, чеклист для ревью,
-каталог антипаттернов и правила раскладки тестовых файлов.
+The skill covers the 110 rules Bugayenko published from the book in [yegor256/at](https://github.com/yegor256/at) (chapters 2, 3 and 6). It keeps his rule numbers, so a review comment reads "violates 2.10: shared `setUp`" and you can look the rule up in the source. Each rule has an explanation and a bad/good example. The examples use Java, Python, JS/TS, Go, Ruby, Rust and Swift.
 
-## Установка
+## What you get
+
+Claude Code loads the skill when you ask it to write or review tests ("review these tests against angry tests"), or when you type `/angry-tests`. With the skill loaded, Claude:
+
+- writes tests with one assertion and a failure message, no shared state, fakes instead of mocks, hostile inputs and timeouts;
+- reviews tests and reports each violation as `file:line`, rule number, problem and fix, grouped into critical, important and style.
+
+## When to skip it
+
+Bugayenko's rules are opinionated. They forbid mock frameworks, `setUp`/`tearDown`, shared constants and comments in tests. If your suite relies on Mockito-style mocks or shared fixtures, the skill will flag most of it. Install it when you want that pressure on your tests.
+
+## Install
+
+You need Claude Code. Clone the repository into your personal skills folder:
 
 ```bash
 git clone https://github.com/Christian-SC26/angry-tests-skill.git ~/.claude/skills/angry-tests
 ```
 
-Для одного проекта вместо всех — клонируй в `.claude/skills/angry-tests` внутри проекта.
+To use it in one project only, clone into `.claude/skills/angry-tests` inside that project.
 
-## Использование
+## What's inside
 
-Скилл подключается автоматически, когда просишь написать или отревьюить тесты
-(«напиши тесты по angry tests», «проверь тесты по Бугаенко»), или явно: `/angry-tests`.
+| File | Contents |
+|------|----------|
+| `SKILL.md` | Workflow for writing and reviewing tests, rules 2.1–2.33 and 3.1–3.49 with examples, checklist |
+| `references/fancy-tests.md` | Chapter 6: rules 6.1–6.28 with tools for each ecosystem |
+| `references/anti-patterns.md` | 23 unit-testing anti-patterns and the rules that fix them |
+| `references/layout.md` | Test file layout and naming, `*Test` vs `*ITCase`, where fakes live |
 
-## Структура
+## Coverage
 
-| Файл | Содержимое |
-|------|------------|
-| `SKILL.md` | Философия, порядок работы, правила 2.1–2.33 и 3.1–3.49 с примерами, чеклист |
-| `references/fancy-tests.md` | Глава 6: правила 6.1–6.28 и инструменты по экосистемам |
-| `references/anti-patterns.md` | 23 антипаттерна юнит-тестирования и правила, которые их лечат |
-| `references/layout.md` | Раскладка и именование тестов, `*Test` / `*ITCase`, где хранить фейки |
+Rule wordings match yegor256/at as of November 2026. Chapters 1, 4 and 5 of the book and its second volume (May 2026) are not public, so the skill leaves them out. The explanations and examples are mine, drawn from Bugayenko's blog posts. Where a rule is ambiguous, `SKILL.md` labels the explanation as an interpretation.
 
-## Источники
+## License
 
-Формулировки правил взяты из [yegor256/at](https://github.com/yegor256/at) — выдержек из книги,
-опубликованных автором под лицензией MIT. Пояснения, примеры и сопоставления добавлены здесь
-и опираются на блог автора ([yegor256.com](https://www.yegor256.com)). Главы 1, 4, 5 и второй том
-книги публично не выложены и в скилл не входят — за полной картиной читайте книгу.
-
-## Лицензия
-
-MIT, см. [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE). The rule wordings are © 2025 Yegor Bugayenko and come from yegor256/at under the MIT license.
